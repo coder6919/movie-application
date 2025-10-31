@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Search from './components/Search'
 import Spinner from './components/Spinner';
+import MovieCArd from './components/MovieCArd';
+import { useDebounce } from '@uidotdev/usehooks';
+import { updateSearchCount } from './appwrite';
 
 const BASE_API_URL = 'https://api.themoviedb.org/3';
 
@@ -19,12 +22,18 @@ function App() {
   const[errormsg, setErrorMsg]=useState('')
   const [moviesList, setMoviesList]=useState([])
   const [isLoading,setIsLoading]=useState(false)
+  
 
-  const fetchMovie = async ()=>{
+  // Debounces the search term to prevent making to many api requests 
+  // by waiting for the user to stop typing for a certain time period in our case 500 milisecond
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+  const fetchMovie = async ( query = '' )=>{
     setIsLoading(true);
     setErrorMsg('');
     try{
-      const endpoint = `${BASE_API_URL}/discover/movie?sort_by=popularity.desc`
+      const endpoint = query ? `${BASE_API_URL}/search/movie?query=${encodeURIComponent(query)}`:
+      `${BASE_API_URL}/discover/movie?sort_by=popularity.desc`
       const resp = await fetch(endpoint, API_OPTIONS)
       
       if(!resp.ok){
@@ -38,6 +47,9 @@ function App() {
       }
       setMoviesList(data.results || [])
       // console.log(data)
+      if(query && data.results.length > 0 ){
+        await updateSearchCount(query, data.results[0])
+      }
     }
     catch(error){
       console.log(`error fetching data, ${error}`)
@@ -48,8 +60,8 @@ function App() {
     }
   }
   useEffect(()=>{
-    fetchMovie();
-  },[])
+    fetchMovie(debouncedSearchTerm);
+  },[debouncedSearchTerm])
   return (
     <div>
       <main>
@@ -70,10 +82,10 @@ function App() {
             ) : (
               <ul>
                 {
-                  moviesList.map((item,index) => {
+                  moviesList.map((movie,index) => {
                     return(
-                      <div key={item.id}>
-                        <p className='text-white'>{item.title}</p>
+                      <div key={movie.id}>
+                        <MovieCArd key={movie.id} movie={movie}/>
                       </div>
                     )
                   })
