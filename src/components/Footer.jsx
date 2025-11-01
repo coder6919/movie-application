@@ -15,7 +15,7 @@ function Footer() {
         
         {/* We update the text color to be lighter (text-gray-400) */}
         <span className="text-sm text-gray-400 sm:text-center">
-          © 2023{' '}
+          © 2025{' '}
           {/* We use your site's gradient logo style here */}
           <Link to="/" className="text-sm font-bold transition-opacity hover:opacity-80">
             <span className="text-gradient">Movie</span>Flix
