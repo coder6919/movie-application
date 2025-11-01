@@ -1,8 +1,14 @@
 import React from 'react'
 
-function MovieCArd({movie : {title,vote_average,poster_path,release_date, original_language}}) {
+function MovieCArd({movie}) {
+  if (!movie) {
+    return null;
+  }
+
+  // Now that we know 'movie' exists, we can safely destructure it
+  const { title, vote_average, poster_path, release_date, original_language } = movie;
   return (
-    <div className='movie-card'>
+    <div className='movie-card' style={{cursor:"pointer"}}>
       {/* <p className='text-white'>{title}</p> */}
       {/* image of movie */}
       <img src={poster_path ? `https://image.tmdb.org/t/p/w500/${poster_path}` : 'No-Poster.png'} alt={title}/>
