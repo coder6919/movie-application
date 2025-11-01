@@ -160,3 +160,127 @@
     display: none;
   }
 }
+
+/* ADD THIS CSS TO THE BOTTOM OF YOUR 'src/index.css' FILE 
+*/
+
+/* This @keyframe rule defines the actual animation.
+  It moves the track from its starting position (0)
+  to the left by 50% of its total width.
+*/
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  /* We move it 50% because the track is 200% wide 
+    (100% original list + 100% duplicate list).
+    This creates a seamless loop.
+  */
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* This is the main container or "window".
+  It hides all the posters that are outside its view.
+*/
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+  /* This part is optional, but it adds a nice fade 
+    effect on the left and right edges.
+  */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+/* This is the long horizontal strip that holds all the 
+  posters and actually moves.
+*/
+.carousel-track {
+  display: flex;
+  width: max-content; /* Makes the track as wide as all its children */
+  
+  /* These apply the animation */
+  animation-name: scroll-left;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  
+  /* The 'animation-duration' is set inline from your React component */
+}
+
+/* This is an important usability feature.
+  It pauses the scrolling when the user hovers their mouse 
+  over the carousel, so they can easily click a poster.
+*/
+.carousel-container:hover .carousel-track {
+  animation-play-state: paused;
+}
+
+
+/* ADD THIS TO THE BOTTOM OF YOUR src/index.css FILE
+  (If you don't already have a .text-gradient class)
+*/
+
+.text-gradient {
+  /* This creates a blue-to-cyan gradient */
+  background-image: linear-gradient(to right, #3b82f6, #06b6d4); 
+  
+  /* These lines "clip" the gradient to the shape of the text */
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* This makes the text itself transparent so the gradient shows through */
+  color: transparent;
+}
+
+/* --- Back Button Hover Effect --- */
+.btn-fill-hover {
+  /* --- Base Styles (Tailwind equivalents) --- */
+  display: inline-flex;  /* (like 'flex') */
+  align-items: center;    /* (like 'items-center') */
+  gap: 0.5rem;            /* (like 'gap-2') */
+  padding: 0.5rem 1rem;   /* (like 'py-2 px-4') */
+  font-weight: 600;     /* (like 'font-semibold') */
+  border-radius: 0.5rem;  /* (like 'rounded-lg') */
+  
+  /* --- Colors & Outline --- */
+  /* This uses your site's gradient colors */
+  color: #3b82f6; 
+  border: 1px solid #3b82f6;
+  background-color: transparent;
+  
+  /* --- Magic for Hover Effect --- */
+  position: relative;
+  overflow: hidden;
+  z-index: 1; /* Keep text above the pseudo-element */
+  transition: color 0.3s ease-in-out;
+}
+
+.btn-fill-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0; 
+  bottom: 0;
+  right: 0;
+  
+  /* --- This is your site's gradient! --- */
+  background: linear-gradient(to right, #3b82f6, #06b6d4); 
+  
+  /* --- Start off-screen to the RIGHT --- */
+  transform: translateX(100%); 
+  
+  transition: transform 0.3s ease-in-out;
+  z-index: -1;
+}
+
+.btn-fill-hover:hover {
+  color: white; /* Change text color on hover */
+}
+
+.btn-fill-hover:hover::before {
+  /* --- Slide in from the RIGHT to fill --- */
+  transform: translateX(0); 
+}
+
