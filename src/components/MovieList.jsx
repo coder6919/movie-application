@@ -93,7 +93,10 @@ function MovieList({ API_OPTIONS, BASE_API_URL }) {
         </h1>
         <Search searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <section className='all-movies'>
-          <h1 className="mt-5">All Movies</h1>
+          <h2 className="mt-5">
+            {searchTerm ? `Results for "${searchTerm}"` : "Popular Movies"}
+
+          </h2>
           {isLoading ? (
             <Spinner />
           ) : errormsg ? (
