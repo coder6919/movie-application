@@ -9,10 +9,12 @@ const HeaderCarousel = ({ movies }) => {
   const animationDuration = `${movies.length * 2}s`;
 
   return (
+
     <div className="carousel-container mb-8">
       {/* This track contains the duplicated list.
         The CSS animation will move this entire track.
       */}
+      <h1>Trending Movies</h1>
       <div 
         className="carousel-track" 
         style={{ animationDuration: animationDuration }}
